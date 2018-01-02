@@ -9,11 +9,6 @@ IF OBJECT_ID('egzemplarz', 'U') IS NOT NULL
       DROP CONSTRAINT egzemplarz_produkt_FK
   GO
   DROP TABLE egzemplarz;
- 
-IF OBJECT_ID('faktury', 'U') IS NOT NULL
-  ALTER TABLE faktury
-      DROP CONSTRAINT faktury_klient_FK
-  GO
 
 IF OBJECT_ID('kontakt', 'U') IS NOT NULL
   ALTER TABLE kontakt
@@ -41,21 +36,20 @@ IF OBJECT_ID('produktZamowienie', 'U') IS NOT NULL
   GO
   DROP TABLE produktZamowienie;
  
---IF OBJECT_ID('zamowienie', 'U') IS NOT NULL
---  ALTER TABLE zamowienie
---      DROP CONSTRAINT zamowienie_faktury_FK
---  GO
- 
- 
 IF OBJECT_ID('produkt', 'U') IS NOT NULL
   DROP TABLE produkt;
 
+ IF OBJECT_ID('faktury', 'U') IS NOT NULL
+  ALTER TABLE faktury
+      DROP CONSTRAINT faktury_klient_FK
+  GO
   ALTER TABLE faktury
       DROP CONSTRAINT faktury_zamowienie_FK
   GO
   DROP TABLE faktury; 
 
-    ALTER TABLE zamowienie
+  IF OBJECT_ID('zamowienie', 'U') IS NOT NULL
+  ALTER TABLE zamowienie
       DROP CONSTRAINT zamowienie_klient_FK
   GO
   DROP TABLE zamowienie;
