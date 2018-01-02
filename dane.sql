@@ -252,5 +252,4 @@ INSERT INTO zamowienie(nr_zamowienia, klient_login, forma_dostawy) VALUES
 
 
 
-Select * from zamowienie
 
