@@ -13,7 +13,7 @@ INSERT INTO klient (login, haslo, imie, nazwisko, nip, nazwa_firmy)
 
 GO
 -- Wstaw_klienta 'test1', 'test2', 'test3', 'test4', '12345678910', 'test6'
--- do poprawki
+-- NIEŚMIGA do poprawki
 CREATE PROCEDURE Usun_klienta (
 		@login VARCHAR(64)
 		)
@@ -27,6 +27,8 @@ BEGIN
 		WHERE login = @login
 		DELETE from adres
 		WHERE login= @login
+		DELETE FROM kontakt
+		where login = @login
 	ELSE
 		PRINT N'Nie mozna usunac podanego klienta'
 END
@@ -55,3 +57,22 @@ AS
 	WHERE klient_login = @login
 GO
 
+--śmiga
+CREATE PROCEDURE Wstaw_kontakt (
+        @login VARCHAR(64),
+        @nr_tel INT,
+        @fax INT,
+		@email VARCHAR(64)
+		)
+AS
+INSERT INTO kontakt (klient_login, nr_tel, fax, email)
+        VALUES (@login, @nr_tel, @fax, @email)
+GO
+--śmiga
+CREATE PROCEDURE Usun_kontakt (
+		@login VARCHAR(64)
+		)
+AS
+	DELETE FROM kontakt
+	WHERE klient_login = @login
+GO
