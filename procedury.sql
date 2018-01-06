@@ -78,3 +78,30 @@ AS
 	WHERE klient_login = @login
 GO
 
+--śmiga
+CREATE PROCEDURE Wstaw_produkt (
+        @kod VARCHAR(64),
+        @nazwa VARCHAR(64),
+		@producent VARCHAR(64),
+		@netto MONEY,
+		@brutto MONEY,
+		@kolor VARCHAR(64),
+		@ilosc VARCHAR(64),
+		@kategoria VARCHAR(64)
+		)
+AS
+INSERT INTO produkt (kod_produktu, nazwa_produktu, producent, cena_netto, cena_brutto, kolor, ilosc, kategoria)
+        VALUES (@kod, @nazwa, @producent, @netto, @brutto, @kolor, @ilosc, @kategoria)
+GO
+
+--śmiga
+CREATE PROCEDURE Usun_produkt (
+		@kod VARCHAR(64)
+		)
+AS
+	DELETE FROM produkt
+	WHERE kod_produktu = @kod
+GO
+
+
+
