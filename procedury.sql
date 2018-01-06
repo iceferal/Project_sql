@@ -4,9 +4,17 @@ CREATE PROCEDURE Wstaw_klienta (
         @imie VARCHAR(64),
 		@nazwisko VARCHAR(64),
 		@nip VARCHAR(64),
-		@nazwa_firmy VARCHAR(64),
-		)
+		@nazwa_firmy VARCHAR(64))
 AS
-INSERT INTO klient (login, haslo, szef, imie, nazwisko, nip, nazwa_firmy)
-        VALUES (@login, @haslo, @szef, @imie, @nazwisko, @nip, @nazwa_firmy)
+BEGIN
+                RAISERROR ('Wprowadziles bledne dane. Prosze, sprawdz je.',
+                        16,
+                        1
+                )
+END
+INSERT INTO klient (login, haslo, imie, nazwisko, nip, nazwa_firmy)
+        VALUES (@login, @haslo, @imie, @nazwisko, @nip, @nazwa_firmy)
+
 GO
+-- Wstaw_klienta 'test1', 'test2', 'test3', 'test4', '12345678910', 'test6'
+
