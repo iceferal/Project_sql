@@ -68,6 +68,7 @@ AS
 INSERT INTO kontakt (klient_login, nr_tel, fax, email)
         VALUES (@login, @nr_tel, @fax, @email)
 GO
+
 --śmiga
 CREATE PROCEDURE Usun_kontakt (
 		@login VARCHAR(64)
@@ -76,3 +77,4 @@ AS
 	DELETE FROM kontakt
 	WHERE klient_login = @login
 GO
+
