@@ -33,7 +33,7 @@ BEGIN
 		PRINT N'Nie mozna usunac podanego klienta'
 END
 GO
---śmiga
+--PrawieŚmiga
 CREATE PROCEDURE Wstaw_adres (
         @login VARCHAR(64),
         @ulica VARCHAR(64),
@@ -46,6 +46,24 @@ AS
 INSERT INTO adres (klient_login, ulica, nr_domu, nr_lokalu, kod_pocztowy, miasto)
         VALUES (@login, @ulica, @nr_domu, @nr_lokalu, @kod_pocztowy, @miasto)
 
+GO
+
+--PrawieŚmiga
+CREATE PROCEDURE Zmodyfikuj_adres (
+        @login VARCHAR(64),
+        @ulica VARCHAR(64),
+        @nr_domu INT=NULL,
+		@nr_lokalu  INT,
+		@kod_pocztowy VARCHAR(64),
+		@miasto VARCHAR(64))
+AS
+UPDATE 	adres 
+SET 	ulica = @ulica, 
+		nr_domu = @nr_domu,
+		nr_lokalu = @nr_lokalu,
+		kod_pocztowy = @kod_pocztowy,
+		miasto = @miasto
+WHERE 	klient_login = @login
 GO
 
 --śmiga
@@ -102,6 +120,8 @@ AS
 	DELETE FROM produkt
 	WHERE kod_produktu = @kod
 GO
+
+
 
 
 
