@@ -126,7 +126,6 @@ CREATE TABLE egzemplarz
     (
      nr_seryjny INTEGER NOT NULL ,
      produkt_kod_produktu VARCHAR (64) NOT NULL, --REFERENCES produkt(kod_produktu),
-     data_zakupu DATETIME NOT NULL CONSTRAINT ck_egz_datzak DEFAULT GETDATE(),
      data_sprzedazy DATETIME,
      czy_sprzedano INTEGER NOT NULL CONSTRAINT ck_egz_czy CHECK (czy_sprzedano IN ('0', '1')) DEFAULT '0'
     )
