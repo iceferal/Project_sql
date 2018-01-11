@@ -1,3 +1,5 @@
+--Klient
+
 --śmiga
 CREATE PROCEDURE Wstaw_klienta (
         @login VARCHAR(64),
@@ -13,6 +15,9 @@ INSERT INTO klient (login, haslo, imie, nazwisko, nip, nazwa_firmy)
 
 GO
 -- Wstaw_klienta 'test1', 'test2', 'test3', 'test4', '12345678910', 'test6'
+
+-- CREATE PROCEDURE Modyfikuj_klienta
+
 -- NIEŚMIGA do poprawki
 CREATE PROCEDURE Usun_klienta (
 		@login VARCHAR(64)
@@ -33,7 +38,10 @@ BEGIN
 		PRINT N'Nie mozna usunac podanego klienta'
 END
 GO
---PrawieŚmiga
+
+--Adres
+
+--PRAWIEŚmiga-jest blad z wstawianiem pustego nr_lokalu
 CREATE PROCEDURE Wstaw_adres (
         @login VARCHAR(64),
         @ulica VARCHAR(64),
@@ -48,7 +56,7 @@ INSERT INTO adres (klient_login, ulica, nr_domu, nr_lokalu, kod_pocztowy, miasto
 
 GO
 
---PrawieŚmiga
+--PrawieŚmiga-jest blad z wstawianiem pustego nr_lokalu
 CREATE PROCEDURE Zmodyfikuj_adres (
         @login VARCHAR(64),
         @ulica VARCHAR(64),
@@ -75,6 +83,8 @@ AS
 	WHERE klient_login = @login
 GO
 
+--Kontakt
+
 --śmiga
 CREATE PROCEDURE Wstaw_kontakt (
         @login VARCHAR(64),
@@ -88,6 +98,23 @@ INSERT INTO kontakt (klient_login, nr_tel, fax, email)
 GO
 
 --śmiga
+CREATE PROCEDURE Zmodyfikuj_kontakt (
+        @login VARCHAR(64),
+        @nr_tel INT,
+        @fax INT,
+		@email VARCHAR(64)
+		)
+AS
+UPDATE 	kontakt 
+SET 	nr_tel = @nr_tel, 
+		fax = @fax,
+		email = @email
+WHERE 	klient_login = @login
+GO
+
+--Zmodyfikuj_kontakt 'Wili65', 999999999, 123456789, 'wili65@gmail.com'
+
+--śmiga
 CREATE PROCEDURE Usun_kontakt (
 		@login VARCHAR(64)
 		)
@@ -95,6 +122,8 @@ AS
 	DELETE FROM kontakt
 	WHERE klient_login = @login
 GO
+
+-- Produkt
 
 --śmiga
 CREATE PROCEDURE Wstaw_produkt (
