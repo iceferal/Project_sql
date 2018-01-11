@@ -141,6 +141,8 @@ INSERT INTO produkt (kod_produktu, nazwa_produktu, producent, cena_netto, cena_b
         VALUES (@kod, @nazwa, @producent, @netto, @brutto, @kolor, @ilosc, @kategoria)
 GO
 
+--CREATE PROCEDURE Modyfikuj_produkt
+
 --śmiga
 CREATE PROCEDURE Usun_produkt (
 		@kod VARCHAR(64)
@@ -150,7 +152,19 @@ AS
 	WHERE kod_produktu = @kod
 GO
 
+--Procedura raportuje wszystkie zamowienia z danego typu wysyłki
+CREATE PROCEDURE Dostawy (
+        @rodzaj_dostawy VARCHAR(64)
+		)
+AS
+SELECT nr_zamowienia,
+		klient_login,
+		data_zlozenia,
+		data_wysylki
+FROM zamowienie
+WHERE forma_dostawy = @rodzaj_dostawy
+GO
 
+-- Dostawy 'kurier
 
-
-
+'
