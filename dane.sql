@@ -244,11 +244,6 @@ INSERT INTO egzemplarz(nr_seryjny, produkt_kod_produktu, data_zakupu) VALUES
 
 
 
-INSERT INTO zamowienie(nr_zamowienia, klient_login) VALUES
-( '123312', 'Mahmet74')
-
-INSERT INTO zamowienie(nr_zamowienia, klient_login, forma_dostawy) VALUES
-( '548456', 'Mahmet74', 'poczta polska')
 
 
 
