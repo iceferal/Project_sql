@@ -178,13 +178,13 @@ Declare @seria Int;
 	If not exists (Select nr_zamowienia From Zamowienie)
 	set @nr = 1
 	else
-	Set @nr = (Select TOP 1 nr_zamowienia From Zamowienie Order by nr_zamowienia) + 1;
+	Set @nr = (Select MAX(nr_zamowienia) From Zamowienie) + 1;
 
 Declare @faktura int;
 	If not exists (Select nr_faktury From Faktury)
 	set @faktura = 1
 	else
-	Set @faktura = (Select TOP 1 nr_faktury From Faktury Order by nr_faktury) + 1;
+	Set @faktura = (Select MAX(nr_faktury) From Faktury ) + 1;
 
 Insert Into Zamowienie (nr_zamowienia, klient_login) Values
 	( @nr, @login )
@@ -195,9 +195,9 @@ Insert Into produktZamowienie Values
 Insert Into produktFaktura Values
 	( @produkt, @faktura )
 
-Set @seria = (Select Top 1 nr_seryjny From Egzemplarz Where produkt_kod_produktu Like @produkt)
+Set @seria = (Select MAX(nr_seryjny) From Egzemplarz Where produkt_kod_produktu Like @produkt)
 
-	Update Egzemplarz
+Update Egzemplarz
 	Set czy_sprzedano = 1
 	Where nr_seryjny = @seria
-Go	
+Go
