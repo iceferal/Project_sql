@@ -16,73 +16,6 @@ INSERT INTO klient (login, haslo, imie, nazwisko, nip, nazwa_firmy)
 GO
 -- Wstaw_klienta 'test1', 'test2', 'test3', 'test4', '12345678910', 'test6'
 
--- CREATE PROCEDURE Modyfikuj_klienta
-
--- NIEŚMIGA do poprawki
-CREATE PROCEDURE Usun_klienta (
-		@login VARCHAR(64)
-		)
-AS
-BEGIN
-	IF NOT EXISTS (SELECT klient_login 
-                                                FROM zamowienie
-                                                WHERE klient_login = @login)
-
-		DELETE FROM klient
-		WHERE login = @login
-		DELETE from adres
-		WHERE login= @login
-		DELETE FROM kontakt
-		where login = @login
-	ELSE
-		PRINT N'Nie mozna usunac podanego klienta'
-END
-GO
-
---Adres
-
---PRAWIEŚmiga-jest blad z wstawianiem pustego nr_lokalu
-CREATE PROCEDURE Wstaw_adres (
-        @login VARCHAR(64),
-        @ulica VARCHAR(64),
-        @nr_domu INT=NULL,
-		@nr_lokalu  INT,
-		@kod_pocztowy VARCHAR(64),
-		@miasto VARCHAR(64))
-AS
-
-INSERT INTO adres (klient_login, ulica, nr_domu, nr_lokalu, kod_pocztowy, miasto)
-        VALUES (@login, @ulica, @nr_domu, @nr_lokalu, @kod_pocztowy, @miasto)
-
-GO
-
---PrawieŚmiga-jest blad z wstawianiem pustego nr_lokalu
-CREATE PROCEDURE Zmodyfikuj_adres (
-        @login VARCHAR(64),
-        @ulica VARCHAR(64),
-        @nr_domu INT=NULL,
-		@nr_lokalu  INT,
-		@kod_pocztowy VARCHAR(64),
-		@miasto VARCHAR(64))
-AS
-UPDATE 	adres 
-SET 	ulica = @ulica, 
-		nr_domu = @nr_domu,
-		nr_lokalu = @nr_lokalu,
-		kod_pocztowy = @kod_pocztowy,
-		miasto = @miasto
-WHERE 	klient_login = @login
-GO
-
---śmiga
-CREATE PROCEDURE Usun_adres (
-		@login VARCHAR(64)
-		)
-AS
-	DELETE FROM adres
-	WHERE klient_login = @login
-GO
-
 --Kontakt
 
 --śmiga
@@ -140,8 +73,6 @@ AS
 INSERT INTO produkt (kod_produktu, nazwa_produktu, producent, cena_netto, cena_brutto, kolor, ilosc, kategoria)
         VALUES (@kod, @nazwa, @producent, @netto, @brutto, @kolor, @ilosc, @kategoria)
 GO
-
---CREATE PROCEDURE Modyfikuj_produkt
 
 --śmiga
 CREATE PROCEDURE Usun_produkt (

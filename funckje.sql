@@ -22,3 +22,18 @@ END;
 --SELECT * FROM ListaProduktow('Bosh')
 --SELECT * FROM ListaProduktow('OnePlus')
 
+
+--nie dziala jak powinno
+CREATE FUNCTION LiczbaZamowien
+(
+    @login VARCHAR(64)
+)
+    RETURNS INT
+AS
+BEGIN
+	DECLARE @wynik INT
+	SELECT @wynik= COUNT(z.nr_zamowienia)
+	FROM zamowienie Z
+	WHERE z.klient_login = @login
+	RETURN @wynik
+END;
