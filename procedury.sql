@@ -104,31 +104,48 @@ Create Procedure Dodaj_zamowienie (
 		@login Varchar(64),
 		@produkt Varchar(64))
 As
-Declare @nr Int;
-Declare @seria Int;
-	If not exists (Select nr_zamowienia From Zamowienie)
-	set @nr = 1
-	else
-	Set @nr = (Select MAX(nr_zamowienia) From Zamowienie) + 1;
+If exists (Select TOP 1 nr_seryjny From Egzemplarz Where (produkt_kod_produktu Like @produkt AND czy_sprzedano = 0) ORDER BY nr_seryjny)
+begin
+	Declare @id Int;
+		If not exists (Select id_zamowienia From Zamowienie)
+		set @id = 1
+		else
+		Set @id = (Select MAX(id_zamowienia) From Zamowienie) + 1;
 
-Declare @faktura int;
-	If not exists (Select nr_faktury From Faktury)
-	set @faktura = 1
-	else
-	Set @faktura = (Select MAX(nr_faktury) From Faktury ) + 1;
+	Declare @nr Int;
+		If not exists (Select nr_zamowienia From Zamowienie)
+		set @nr = 1
+		else
+		Set @nr = (Select MAX(nr_zamowienia) From Zamowienie) + 1;
+	
+	Declare @fak int;
+		If not exists (Select faktura From Faktury)
+		set @fak = 1
+		else
+		Set @fak = (Select MAX(faktura) From Faktury ) + 1;
 
-Insert Into Zamowienie (nr_zamowienia, klient_login) Values
-	( @nr, @login )
-Insert Into Faktury (nr_faktury, zamowienie_nr, klient_login, wartosc_netto, wartosc_brutto) Values
-	( @faktura, @nr, @login, (Select cena_netto from Produkt where kod_produktu = @produkt), (Select cena_brutto from Produkt where kod_produktu = @produkt) )
-Insert Into produktZamowienie Values
-	( @produkt, @nr )
-Insert Into produktFaktura Values
-	( @produkt, @faktura )
+	Declare @nrfak int;
+		If not exists (Select nr_faktury From Faktury)
+		set @nrfak = 1
+		else
+		Set @nrfak = (Select MAX(nr_faktury) From Faktury ) + 1;
 
-Set @seria = (Select MAX(nr_seryjny) From Egzemplarz Where produkt_kod_produktu Like @produkt)
+	Insert Into Zamowienie (id_zamowienia, nr_zamowienia, klient_login) Values
+		( @id, @nr, @login )
+	Insert Into Faktury (faktura, nr_faktury, zamowienie_nr, klient_login, wartosc_netto, wartosc_brutto) Values
+		( @fak, @nrfak, @nr, @login, (Select cena_netto from Produkt where kod_produktu = @produkt), (Select cena_brutto from Produkt where kod_produktu = @produkt) )
+	Insert Into produktZamowienie Values
+		( @produkt, @nr )
+	Insert Into produktFaktura Values
+		( @produkt, @fak )
 
-Update Egzemplarz
-	Set czy_sprzedano = 1
-	Where nr_seryjny = @seria
+	Declare @seria Int;
+	Set @seria = (Select TOP 1 nr_seryjny From Egzemplarz Where (produkt_kod_produktu Like @produkt AND czy_sprzedano = 0) ORDER BY nr_seryjny)
+
+	Update Egzemplarz
+		Set czy_sprzedano = 1
+		Where nr_seryjny = @seria
+end
+else
+	Print 'brak dostępnych egzeplarzy tego produktu!'
 Go
