@@ -22,7 +22,7 @@ ALTER TABLE klient ADD CONSTRAINT klient_PK PRIMARY KEY CLUSTERED (login)
  
 CREATE TABLE adres
     (
-     klient_login VARCHAR (64) NOT NULL, --REFERENCES klient(login),
+     klient_login VARCHAR (64) NOT NULL,
      ulica VARCHAR (64) NOT NULL CONSTRAINT ck_adres_ul CHECK (ulica LIKE '[A-Z]%'),
      nr_domu INTEGER NOT NULL CONSTRAINT ck_adres_dom CHECK (nr_domu > 0),
      nr_lokalu INTEGER CONSTRAINT ck_adres_lok CHECK (nr_lokalu > 0),
@@ -43,7 +43,7 @@ ALTER TABLE adres ADD CONSTRAINT adres_PK PRIMARY KEY CLUSTERED (klient_login)
  
 CREATE TABLE kontakt
     (
-     klient_login VARCHAR (64) NOT NULL, --REFERENCES klient(login),
+     klient_login VARCHAR (64) NOT NULL,
      nr_tel INTEGER NOT NULL CONSTRAINT ck_kont_tel CHECK(nr_tel LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
      fax INTEGER NOT NULL CONSTRAINT ck_kont_fax CHECK(fax LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
      email VARCHAR (64) NOT NULL CONSTRAINT ck_email_mal CHECK (email LIKE '%@%'),
@@ -85,9 +85,10 @@ ALTER TABLE produkt ADD CONSTRAINT produkt_PK PRIMARY KEY CLUSTERED (kod_produkt
 
 CREATE TABLE faktury
     (
-     nr_faktury VARCHAR (64) NOT NULL ,
+     faktura INTEGER NOT NULL ,
+	 nr_faktury INTEGER NOT NULL CONSTRAINT ck_faktury_nr CHECK (nr_faktury > 0),
      zamowienie_nr INTEGER NOT NULL CONSTRAINT ck_faktury_zam CHECK (zamowienie_nr > 0),
-     klient_login VARCHAR (64) NOT NULL, --REFERENCES klient(login),
+     klient_login VARCHAR (64) NOT NULL,
      data_sprzedazy DATETIME NOT NULL CONSTRAINT ck_faktury_data DEFAULT GETDATE(),
      wartosc_netto MONEY NOT NULL CONSTRAINT ck_faktury_wn CHECK (wartosc_netto > 0),
      wartosc_brutto MONEY NOT NULL CONSTRAINT ck_faktury_wb CHECK (wartosc_brutto > 0),
@@ -96,7 +97,7 @@ CREATE TABLE faktury
     ON "default"
 GO
  
-ALTER TABLE faktury ADD CONSTRAINT faktury_PK PRIMARY KEY CLUSTERED (nr_faktury)
+ALTER TABLE faktury ADD CONSTRAINT faktury_PK PRIMARY KEY CLUSTERED (faktura)
      WITH (
      ALLOW_PAGE_LOCKS = ON ,
      ALLOW_ROW_LOCKS = ON )
@@ -107,13 +108,13 @@ ALTER TABLE faktury ADD CONSTRAINT faktury_PK PRIMARY KEY CLUSTERED (nr_faktury)
 
 CREATE TABLE produktFaktura
     (
-     produkt_kod_produktu VARCHAR (64) NOT NULL, --REFERENCES produkt(kod_produktu),
-     faktury_nr_faktury VARCHAR (64) NOT NULL --REFERENCES faktury(nr_faktury)
+     produkt_kod_produktu VARCHAR (64) NOT NULL, 
+     faktury_faktura INTEGER NOT NULL 
     )
     ON "default"
 GO
  
-ALTER TABLE produktFaktura ADD CONSTRAINT produktFaktura_PK PRIMARY KEY CLUSTERED (produkt_kod_produktu, faktury_nr_faktury)
+ALTER TABLE produktFaktura ADD CONSTRAINT produktFaktura_PK PRIMARY KEY CLUSTERED (produkt_kod_produktu, faktury_faktura)
      WITH (
      ALLOW_PAGE_LOCKS = ON ,
      ALLOW_ROW_LOCKS = ON )
@@ -125,7 +126,7 @@ ALTER TABLE produktFaktura ADD CONSTRAINT produktFaktura_PK PRIMARY KEY CLUSTERE
 CREATE TABLE egzemplarz
     (
      nr_seryjny INTEGER NOT NULL ,
-     produkt_kod_produktu VARCHAR (64) NOT NULL, --REFERENCES produkt(kod_produktu),
+     produkt_kod_produktu VARCHAR (64) NOT NULL,
      data_zakupu DATETIME NOT NULL CONSTRAINT ck_egz_datzak DEFAULT GETDATE(),
      data_sprzedazy DATETIME,
      czy_sprzedano INTEGER NOT NULL CONSTRAINT ck_egz_czy CHECK (czy_sprzedano IN ('0', '1')) DEFAULT '0'
@@ -144,8 +145,9 @@ ALTER TABLE egzemplarz ADD CONSTRAINT egzemplarz_PK PRIMARY KEY CLUSTERED (nr_se
  
 CREATE TABLE zamowienie
     (
-     nr_zamowienia INTEGER NOT NULL ,
-     klient_login VARCHAR (64) NOT NULL, --REFERENCES klient(login),
+     id_zamowienia INTEGER NOT NULL ,
+	 nr_zamowienia INTEGER NOT NULL CONSTRAINT ck_zam_nr CHECK (nr_zamowienia > 0),
+     klient_login VARCHAR (64) NOT NULL, 
      data_zlozenia DATETIME NOT NULL CONSTRAINT ck_zam_datzl DEFAULT GETDATE(),
      data_realizacji DATETIME NOT NULL CONSTRAINT ck_zam_datreal DEFAULT DATEADD(day,3,GETDATE()),
      data_wysylki DATETIME NOT NULL CONSTRAINT ck_zam_datwys DEFAULT DATEADD(day,3,GETDATE()),
@@ -156,7 +158,7 @@ CREATE TABLE zamowienie
 GO
 
 ALTER TABLE zamowienie
-     ADD CONSTRAINT zamowienie_PK PRIMARY KEY CLUSTERED (nr_zamowienia)
+     ADD CONSTRAINT zamowienie_PK PRIMARY KEY CLUSTERED (id_zamowienia)
      WITH (
      ALLOW_PAGE_LOCKS = ON ,
      ALLOW_ROW_LOCKS = ON )
@@ -167,8 +169,8 @@ ALTER TABLE zamowienie
  
 CREATE TABLE produktZamowienie
     (
-     produkt_kod_produktu VARCHAR (64) NOT NULL, -- REFERENCES produkt(kod_produktu),
-     zamowienie_nr INTEGER NOT NULL -- REFERENCES zamowienie(nr_zamowienia)
+     produkt_kod_produktu VARCHAR (64) NOT NULL, 
+     zamowienie_nr INTEGER NOT NULL 
     )
     ON "default"
 GO
@@ -234,7 +236,7 @@ ALTER TABLE faktury
     )
     REFERENCES zamowienie
     (
-     nr_zamowienia
+     id_zamowienia
     )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
@@ -256,11 +258,11 @@ GO
 ALTER TABLE produktFaktura
     ADD CONSTRAINT produktFaktura_faktury_FK FOREIGN KEY
     (
-     faktury_nr_faktury
+     faktury_faktura
     )
     REFERENCES faktury
     (
-     nr_faktury
+     faktura
     )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
@@ -299,7 +301,7 @@ ALTER TABLE produktZamowienie
     )
     REFERENCES zamowienie
     (
-     nr_zamowienia
+     id_zamowienia
     )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
