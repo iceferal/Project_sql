@@ -113,10 +113,10 @@ begin
 		Set @id = (Select MAX(id_zamowienia) From Zamowienie) + 1;
 
 	Declare @nr Int;
-		If exists (Select MAX(nr_zamowienia) From Zamowienie Where (klient_login = @login AND Month(GETDATE()) = Month(data_zlozenia) AND DAY(GETDATE()) = DAY(data_zlozenia)) )
-		set @nr = (Select MAX(nr_zamowienia) From Zamowienie Where (klient_login = @login AND Month(GETDATE()) = Month(data_zlozenia) AND DAY(GETDATE()) = DAY(data_zlozenia)))
-		else If not exists (Select nr_zamowienia From Zamowienie)
+		If not exists (Select nr_zamowienia From Zamowienie)
 		set @nr = 1
+		else If exists (Select MAX(nr_zamowienia) From Zamowienie Where (klient_login = @login AND Month(GETDATE()) = Month(data_zlozenia) AND DAY(GETDATE()) = DAY(data_zlozenia)))
+		set @nr = (Select MAX(nr_zamowienia) From Zamowienie Where (klient_login = @login AND Month(GETDATE()) = Month(data_zlozenia) AND DAY(GETDATE()) = DAY(data_zlozenia)))
 		else
 		Set @nr = (Select MAX(nr_zamowienia) From Zamowienie) + 1;
 	
@@ -127,10 +127,10 @@ begin
 		Set @fak = (Select MAX(faktura) From Faktury ) + 1;
 
 	Declare @nrfak int;
-		If exists (Select MAX(nr_faktury) From Faktury Where (klient_login = @login AND Month(GETDATE()) = Month(data_sprzedazy) AND DAY(GETDATE()) = DAY(data_sprzedazy)))
-		set @nrfak = (Select MAX(nr_faktury) From Faktury Where (klient_login = @login AND Month(GETDATE()) = Month(data_sprzedazy) AND DAY(GETDATE()) = DAY(data_sprzedazy)))
-		else If not exists (Select nr_faktury From Faktury)
+		If not exists (Select nr_faktury From Faktury)
 		set @nrfak = 1
+		else If exists (Select MAX(nr_faktury) From Faktury Where (klient_login = @login AND Month(GETDATE()) = Month(data_sprzedazy) AND DAY(GETDATE()) = DAY(data_sprzedazy)))
+		set @nrfak = (Select MAX(nr_faktury) From Faktury Where (klient_login = @login AND Month(GETDATE()) = Month(data_sprzedazy) AND DAY(GETDATE()) = DAY(data_sprzedazy)))
 		else
 		Set @nrfak = (Select MAX(nr_faktury) From Faktury ) + 1;
 
@@ -139,7 +139,7 @@ begin
 	Insert Into Faktury (faktura, nr_faktury, zamowienie_nr, klient_login, wartosc_netto, wartosc_brutto) Values
 		( @fak, @nrfak, @nr, @login, (Select cena_netto from Produkt where kod_produktu = @produkt), (Select cena_brutto from Produkt where kod_produktu = @produkt) )
 	Insert Into produktZamowienie Values
-		( @produkt, @nr )
+		( @produkt, @id )
 	Insert Into produktFaktura Values
 		( @produkt, @fak )
 
