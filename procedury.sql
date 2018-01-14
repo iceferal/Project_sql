@@ -153,3 +153,24 @@ end
 else
 	Print 'brak dostępnych egzeplarzy tego produktu!'
 Go
+
+--- koszyk, smiga jak cholera
+
+Create Procedure Koszyk (
+	@login Varchar(64),
+	@pro1 Varchar(64), 
+	@pro2 Varchar(64)=NULL,
+	@pro3 Varchar(64)=NULL,
+	@pro4 Varchar(64)=NULL,
+	@pro5 Varchar(64)=NULL)
+As
+	EXEC Dodaj_zamowienie @login, @pro1
+	if @pro2 IS NOT NULL
+		EXEC Dodaj_zamowienie @login, @pro2;
+	if (@pro3 IS NOT NULL)
+		EXEC Dodaj_zamowienie @login, @pro3;
+	if (@pro4 IS NOT NULL)
+		EXEC Dodaj_zamowienie @login, @pro4;
+	if (@pro5 IS NOT NULL)
+		EXEC Dodaj_zamowienie @login, @pro5;
+Go
