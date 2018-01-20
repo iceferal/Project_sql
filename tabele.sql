@@ -229,18 +229,18 @@ ALTER TABLE faktury
     ON UPDATE NO ACTION
 GO
  
-ALTER TABLE faktury
-    ADD CONSTRAINT faktury_zamowienie_FK FOREIGN KEY
-    (
-     zamowienie_nr
-    )
-    REFERENCES zamowienie
-    (
-     id_zamowienia
-    )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-GO
+--ALTER TABLE faktury
+--    ADD CONSTRAINT faktury_zamowienie_FK FOREIGN KEY
+--    (
+--     zamowienie_nr
+--    )
+--    REFERENCES zamowienie
+--    (
+--     id_zamowienia
+--    )
+--    ON DELETE NO ACTION
+--    ON UPDATE NO ACTION
+--GO
  
 ALTER TABLE kontakt
     ADD CONSTRAINT kontakt_klient_FK FOREIGN KEY
