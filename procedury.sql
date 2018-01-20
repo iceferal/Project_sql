@@ -115,8 +115,8 @@ begin
 	Declare @nr Int;
 		If not exists (Select nr_zamowienia From Zamowienie)
 		set @nr = 1
-		else If exists (Select MAX(nr_zamowienia) From Zamowienie Where (klient_login = @login AND Month(GETDATE()) = Month(data_zlozenia) AND DAY(GETDATE()) = DAY(data_zlozenia)))
-		set @nr = (Select MAX(nr_zamowienia) From Zamowienie Where (klient_login = @login AND Month(GETDATE()) = Month(data_zlozenia) AND DAY(GETDATE()) = DAY(data_zlozenia)))
+		--else If exists (Select MAX(nr_zamowienia) From Zamowienie Where (klient_login = @login AND Month(GETDATE()) = Month(data_zlozenia) AND DAY(GETDATE()) = DAY(data_zlozenia)))
+		--set @nr = (Select MAX(nr_zamowienia) From Zamowienie Where (klient_login = @login AND Month(GETDATE()) = Month(data_zlozenia) AND DAY(GETDATE()) = DAY(data_zlozenia)))
 		else
 		Set @nr = (Select MAX(nr_zamowienia) From Zamowienie) + 1;
 	
@@ -129,8 +129,8 @@ begin
 	Declare @nrfak int;
 		If not exists (Select nr_faktury From Faktury)
 		set @nrfak = 1
-		else If exists (Select MAX(nr_faktury) From Faktury Where (klient_login = @login AND Month(GETDATE()) = Month(data_sprzedazy) AND DAY(GETDATE()) = DAY(data_sprzedazy)))
-		set @nrfak = (Select MAX(nr_faktury) From Faktury Where (klient_login = @login AND Month(GETDATE()) = Month(data_sprzedazy) AND DAY(GETDATE()) = DAY(data_sprzedazy)))
+		-- else If exists (Select MAX(nr_faktury) From Faktury Where (klient_login = @login AND Month(GETDATE()) = Month(data_sprzedazy) AND DAY(GETDATE()) = DAY(data_sprzedazy)))
+		-- set @nrfak = (Select MAX(nr_faktury) From Faktury Where (klient_login = @login AND Month(GETDATE()) = Month(data_sprzedazy) AND DAY(GETDATE()) = DAY(data_sprzedazy)))
 		else
 		Set @nrfak = (Select MAX(nr_faktury) From Faktury ) + 1;
 
@@ -148,6 +148,7 @@ begin
 
 	Update Egzemplarz
 		Set czy_sprzedano = 1
+	     	data_sprzedazy = Getdate()
 		Where nr_seryjny = @seria
 end
 else
