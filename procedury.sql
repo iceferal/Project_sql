@@ -136,8 +136,8 @@ begin
 
 	Insert Into Zamowienie (id_zamowienia, nr_zamowienia, klient_login) Values
 		( @id, @nr, @login )
-	Insert Into Faktury (faktura, nr_faktury, zamowienie_nr, klient_login, wartosc_netto, wartosc_brutto) Values
-		( @fak, @nrfak, @nr, @login, (Select cena_netto from Produkt where kod_produktu = @produkt), (Select cena_brutto from Produkt where kod_produktu = @produkt) )
+	Insert Into Faktury (faktura, nr_faktury, klient_login, wartosc_netto, wartosc_brutto) Values
+		( @fak, @nrfak, @login, (Select cena_netto from Produkt where kod_produktu = @produkt), (Select cena_brutto from Produkt where kod_produktu = @produkt) )
 	Insert Into produktZamowienie Values
 		( @produkt, @id )
 	Insert Into produktFaktura Values
