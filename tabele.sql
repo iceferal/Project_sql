@@ -86,8 +86,8 @@ ALTER TABLE produkt ADD CONSTRAINT produkt_PK PRIMARY KEY CLUSTERED (kod_produkt
 CREATE TABLE faktury
     (
      faktura INTEGER NOT NULL ,
-	 nr_faktury INTEGER NOT NULL CONSTRAINT ck_faktury_nr CHECK (nr_faktury > 0),
-     zamowienie_nr INTEGER NOT NULL CONSTRAINT ck_faktury_zam CHECK (zamowienie_nr > 0),
+     nr_faktury INTEGER NOT NULL CONSTRAINT ck_faktury_nr CHECK (nr_faktury > 0),
+   --  zamowienie_nr INTEGER NOT NULL CONSTRAINT ck_faktury_zam CHECK (zamowienie_nr > 0),
      klient_login VARCHAR (64) NOT NULL,
      data_sprzedazy DATETIME NOT NULL CONSTRAINT ck_faktury_data DEFAULT GETDATE(),
      wartosc_netto MONEY NOT NULL CONSTRAINT ck_faktury_wn CHECK (wartosc_netto > 0),
