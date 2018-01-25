@@ -668,23 +668,8 @@ INSERT INTO egzemplarz (nr_seryjny, produkt_kod_produktu)
 		VALUES (@seryjny, @kod)
 GO
 
---Wstaw_produkt 'atest1', 'testowy', 'zarabisty', 9999, 1000, 'black', 1, 'test', 9999999
+--Wstaw_produkt 'atest1', 'testowy', 'zarabisty', 9999, 1000, 'black', 1, 'test', 9999999999999
 
---Procedura raportuje wszystkie zamowienia z danego typu wysyłki
-GO
-CREATE PROCEDURE Dostawy (
-        @rodzaj_dostawy VARCHAR(64)
-		)
-AS
-SELECT nr_zamowienia,
-		klient_login,
-		data_zlozenia,
-		data_wysylki
-FROM zamowienie
-WHERE forma_dostawy = @rodzaj_dostawy
-GO
-
--- Dostawy 'kurier'
 GO
 Create Procedure Dodaj_zamowienie (
 		@login Varchar(64),
@@ -742,6 +727,7 @@ else
 	Print 'brak dostępnych egzeplarzy tego produktu!'
 COMMIT TRANSACTION
 GO
+
 GO
 Create Procedure Koszyk (
 	@login Varchar(64),
@@ -763,6 +749,22 @@ As
 Go
 
 -- Koszyk 'test1', 'monit92', 'monit35'
+
+--Procedura raportuje wszystkie zamowienia z danego typu wysyłki
+GO
+CREATE PROCEDURE Dostawy (
+        @rodzaj_dostawy VARCHAR(64)
+		)
+AS
+SELECT nr_zamowienia,
+		klient_login,
+		data_zlozenia,
+		data_wysylki
+FROM zamowienie
+WHERE forma_dostawy = @rodzaj_dostawy
+GO
+
+-- Dostawy 'kurier'
 
 --wyświetla nazwy produktow podanego producenta. jesli takowego nie ma/jest bledny, wyswietla liste wszystkich producentow
 GO
@@ -900,6 +902,3 @@ GO
 
 --Delete from egzemplarz Where nr_seryjny = '06456843'
 --Delete from egzemplarz Where nr_seryjny = '44102074'
-
-
-
