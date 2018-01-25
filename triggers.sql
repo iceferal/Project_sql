@@ -22,3 +22,11 @@ As
 	Print 'Nie mozna usuwac egzeplarzy z rejestru'
 	Rollback
 GO
+
+Delete from egzemplarz Where nr_seryjny = '06456843'
+Delete from egzemplarz Where nr_seryjny = '44102074'
+
+Dodaj_zamowienie 'Serwiliusz01' , 'druk07'
+Select * from Zamowienie
+Dodaj_zamowienie 'Serwiliusz01' , 'klaw547'
+Select * from Zamowienie
