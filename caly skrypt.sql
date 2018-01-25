@@ -1,29 +1,29 @@
---IF OBJECT_ID('adres', 'U') IS NOT NULL
---  DROP TABLE adres;
+IF OBJECT_ID('adres', 'U') IS NOT NULL
+  DROP TABLE adres;
  
---IF OBJECT_ID('egzemplarz', 'U') IS NOT NULL
---  DROP TABLE egzemplarz;
+IF OBJECT_ID('egzemplarz', 'U') IS NOT NULL
+  DROP TABLE egzemplarz;
 
---IF OBJECT_ID('kontakt', 'U') IS NOT NULL
---  DROP TABLE kontakt;
+IF OBJECT_ID('kontakt', 'U') IS NOT NULL
+  DROP TABLE kontakt;
  
---IF OBJECT_ID('produktFaktura', 'U') IS NOT NULL
---  DROP TABLE produktFaktura;
+IF OBJECT_ID('produktFaktura', 'U') IS NOT NULL
+  DROP TABLE produktFaktura;
  
---IF OBJECT_ID('produktZamowienie', 'U') IS NOT NULL
---  DROP TABLE produktZamowienie;
+IF OBJECT_ID('produktZamowienie', 'U') IS NOT NULL
+  DROP TABLE produktZamowienie;
  
---IF OBJECT_ID('produkt', 'U') IS NOT NULL
---  DROP TABLE produkt;
+IF OBJECT_ID('produkt', 'U') IS NOT NULL
+  DROP TABLE produkt;
 
--- IF OBJECT_ID('faktury', 'U') IS NOT NULL
---  DROP TABLE faktury; 
+ IF OBJECT_ID('faktury', 'U') IS NOT NULL
+  DROP TABLE faktury; 
 
--- IF OBJECT_ID('zamowienie', 'U') IS NOT NULL
---  DROP TABLE zamowienie;
+ IF OBJECT_ID('zamowienie', 'U') IS NOT NULL
+  DROP TABLE zamowienie;
 
--- IF OBJECT_ID('klient', 'U') IS NOT NULL
---  DROP TABLE klient;
+ IF OBJECT_ID('klient', 'U') IS NOT NULL
+  DROP TABLE klient;
 
  
 CREATE TABLE klient
@@ -578,6 +578,7 @@ INSERT INTO egzemplarz(nr_seryjny, produkt_kod_produktu, data_zakupu) VALUES
 ( '64040575', 'miks594', '2017-05-28' ),
 ( '97774007', 'miks594', '2017-01-01' )
 
+GO
 CREATE PROCEDURE Wstaw_klienta (
         @login VARCHAR(64),
         @haslo VARCHAR(64),
@@ -592,7 +593,7 @@ INSERT INTO klient (login, haslo, imie, nazwisko, nip, nazwa_firmy)
 
 GO
 -- Wstaw_klienta 'test1', 'test2', 'test3', 'test4', '12345678910', 'test6'
- 
+GO
 CREATE PROCEDURE Wstaw_kontakt (
         @login VARCHAR(64),
         @nr_tel INT,
@@ -605,7 +606,7 @@ INSERT INTO kontakt (klient_login, nr_tel, fax, email)
 GO
 
 --Wstaw_kontakt 'test1', 369258147, 123456789, 'test@gmail.com'
-
+GO
 CREATE PROCEDURE Zmodyfikuj_kontakt (
         @login VARCHAR(64),
         @nr_tel INT,
@@ -621,7 +622,7 @@ WHERE 	klient_login = @login
 GO
 
 --Zmodyfikuj_kontakt 'test1', 369258147, 123456789, 'tttttttttttest@gmail.com'
-
+GO
  CREATE PROCEDURE Usun_kontakt (
 		@login VARCHAR(64)
 		)
@@ -632,6 +633,7 @@ GO
 
 --Usun_kontakt 'test1'
 
+GO
 CREATE PROCEDURE Wstaw_produkt (
         @kod VARCHAR(64),
         @nazwa VARCHAR(64),
@@ -653,6 +655,7 @@ GO
 --Wstaw_produkt 'atest1', 'testowy', 'zarabisty', 9999, 1000, 'black', 1, 'test', 9999999
 
 --Procedura raportuje wszystkie zamowienia z danego typu wysyłki
+GO
 CREATE PROCEDURE Dostawy (
         @rodzaj_dostawy VARCHAR(64)
 		)
@@ -666,7 +669,7 @@ WHERE forma_dostawy = @rodzaj_dostawy
 GO
 
 -- Dostawy 'kurier'
-
+GO
 Create Procedure Dodaj_zamowienie (
 		@login Varchar(64),
 		@produkt Varchar(64))
@@ -722,8 +725,8 @@ end
 else
 	Print 'brak dostępnych egzeplarzy tego produktu!'
 COMMIT TRANSACTION
-Go
-
+GO
+GO
 Create Procedure Koszyk (
 	@login Varchar(64),
 	@pro1 Varchar(64), 
@@ -746,7 +749,7 @@ Go
 -- Koszyk 'test1', 'monit92', 'monit35'
 
 --wyświetla nazwy produktow podanego producenta. jesli takowego nie ma/jest bledny, wyswietla liste wszystkich producentow
-
+GO
 CREATE FUNCTION ListaProduktow
 (
     @nazwa VARCHAR(64)
@@ -764,12 +767,14 @@ BEGIN
                 SELECT DISTINCT producent
                 FROM   produkt;
         RETURN;
-END;
+END
+GO
 
 --SELECT * FROM ListaProduktow('Bosh')
 --SELECT * FROM ListaProduktow('OnePlus')
 
 --zwraca liste zamowien danego klienta
+GO
 CREATE FUNCTION ZamowieniaKlienta(
 	@login VARCHAR(64)
 	)
@@ -787,10 +792,11 @@ ON Pr.zamowienie_nr=z.id_zamowienia
 JOIN produkt p
 ON p.kod_produktu=PR.produkt_kod_produktu
 WHERE k.login=@login
-
+GO
 --SELECT * FROM ZamowieniaKlienta('test1')
 
 --zwraca totalna cene zamowienia o podanym numerze
+GO
 CREATE FUNCTION CenaZamowienia
 (
 	@numer INT
@@ -802,9 +808,9 @@ DECLARE @suma MONEY
 set @suma = (SELECT SUM(cena_brutto) FROM WszystkieZamowienia)
 RETURN @suma
 END;
-
+GO
 --SELECT dbo.CenaZamowienia(1)
-
+GO
 CREATE VIEW Dane_Klientow(login, imie, nazwisko, ulica, nr_domu, kod_pocztowy, miasto, nr_tel, email)
 AS
 (
@@ -826,7 +832,7 @@ AS
 GO
 
 --SELECT * FROM Dane_Klientow
-
+GO
 CREATE VIEW WszystkieZamowienia(nr_zamowienia, login, nazwa_produktu, cena_netto, cena_brutto)
 AS
 (SELECT z.nr_zamowienia,
@@ -845,7 +851,7 @@ ON p.kod_produktu=PR.produkt_kod_produktu
 GO
 
 --SELECT * FROM WszystkieZamowienia
-
+GO
 Create Trigger tri_dostawa On Zamowienie After Insert
 As
 	If (Select SUM(wartosc_brutto) From Faktury
@@ -860,7 +866,12 @@ begin
 end
 Go
 
+--Dodaj_zamowienie 'Serwiliusz01' , 'druk07'
+--Select * from Zamowienie
+--Dodaj_zamowienie 'Serwiliusz01' , 'klaw547'
+--Select * from Zamowienie
 
+GO
 Create Trigger tri_egzemplarz On egzemplarz Instead Of Delete
 As
 	Update Egzemplarz
@@ -871,11 +882,5 @@ As
 	Rollback
 GO
 
-Delete from egzemplarz Where nr_seryjny = '06456843'
-Delete from egzemplarz Where nr_seryjny = '44102074'
-
---Dodaj_zamowienie 'Serwiliusz01' , 'druk07'
---Select * from Zamowienie
---Dodaj_zamowienie 'Serwiliusz01' , 'klaw547'
---Select * from Zamowienie
-
+--Delete from egzemplarz Where nr_seryjny = '06456843'
+--Delete from egzemplarz Where nr_seryjny = '44102074'
