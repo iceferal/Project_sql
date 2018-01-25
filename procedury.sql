@@ -104,8 +104,9 @@ Create Procedure Dodaj_zamowienie (
 		@login Varchar(64),
 		@produkt Varchar(64))
 As
-If exists (Select TOP 1 nr_seryjny From Egzemplarz Where (produkt_kod_produktu Like @produkt AND czy_sprzedano = 0) ORDER BY nr_seryjny)
-begin
+BEGIN TRAN
+	If exists (Select TOP 1 nr_seryjny From Egzemplarz Where (produkt_kod_produktu Like @produkt AND czy_sprzedano = 0) ORDER BY nr_seryjny)
+	begin
 	Declare @id Int;
 		If not exists (Select id_zamowienia From Zamowienie)
 		set @id = 1
@@ -147,25 +148,28 @@ begin
 	Set @seria = (Select TOP 1 nr_seryjny From Egzemplarz Where (produkt_kod_produktu Like @produkt AND czy_sprzedano = 0) ORDER BY nr_seryjny)
 
 	Update Egzemplarz
-		Set czy_sprzedano = 1
+		Set czy_sprzedano = 1,
 	     	data_sprzedazy = Getdate()
 		Where nr_seryjny = @seria
 end
 else
 	Print 'brak dostępnych egzeplarzy tego produktu!'
+COMMIT TRANSACTION
 Go
 
 --- koszyk, smiga jak cholera
 
 Create Procedure Koszyk (
 	@login Varchar(64),
-	@pro1 Varchar(64), 
+	@pro1 Varchar(64)=NULL, 
 	@pro2 Varchar(64)=NULL,
 	@pro3 Varchar(64)=NULL,
 	@pro4 Varchar(64)=NULL,
 	@pro5 Varchar(64)=NULL)
 As
-	EXEC Dodaj_zamowienie @login, @pro1
+begin
+	if @pro1 IS NOT NULL
+	    EXEC Dodaj_zamowienie @login, @pro1
 	if @pro2 IS NOT NULL
 		EXEC Dodaj_zamowienie @login, @pro2;
 	if (@pro3 IS NOT NULL)
@@ -174,4 +178,5 @@ As
 		EXEC Dodaj_zamowienie @login, @pro4;
 	if (@pro5 IS NOT NULL)
 		EXEC Dodaj_zamowienie @login, @pro5;
+end
 Go
