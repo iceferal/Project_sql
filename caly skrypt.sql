@@ -25,6 +25,22 @@ IF OBJECT_ID('produkt', 'U') IS NOT NULL
  IF OBJECT_ID('klient', 'U') IS NOT NULL
   DROP TABLE klient;
 
+DROP PROC Dodaj_zamowienie;
+DROP PROC Dostawy;
+DROP PROC Koszyk;
+DROP PROC Usun_kontakt;
+DROP PROC Wstaw_klienta;
+DROP PROC Wstaw_kontakt;
+DROP PROC Wstaw_produkt;
+DROP PROC Zmodyfikuj_kontakt;
+
+DROP FUNCTION ListaProduktow;
+DROP FUNCTION ZamowieniaKlienta;
+DROP FUNCTION CenaZamowienia;
+
+DROP VIEW Dane_Klientow;
+DROP VIEW WszystkieZamowienia;
+
  
 CREATE TABLE klient
     (
@@ -884,3 +900,6 @@ GO
 
 --Delete from egzemplarz Where nr_seryjny = '06456843'
 --Delete from egzemplarz Where nr_seryjny = '44102074'
+
+
+
