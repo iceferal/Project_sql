@@ -1,4 +1,4 @@
-INSERT INTO klient VALUES
+INSERT INTO klient ( login, haslo, imie, nazwisko, nip, nazwa_firmy) VALUES
 ( 'Nazar03' , 'xppew%^85' , 'Nazar' ,'Staron' ,'68572088910' ,'Bosch Sp.z o.o.' ),
 ( 'Przemko27' , 'ogioe(!54' , 'Przemko' ,'Rozek' ,'37382448272' ,'Okno Company' ),
 ( 'Wili65' , 'lmedn*!59' , 'Wili' ,'Galkowski' ,'76895392878' ,'Ryba S.A.' ),
