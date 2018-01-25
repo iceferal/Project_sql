@@ -6,7 +6,8 @@ CREATE TABLE klient
      imie VARCHAR (64) NOT NULL CONSTRAINT ck_klient_imie CHECK (imie LIKE '[A-Z]%'),
      nazwisko VARCHAR (64) NOT NULL CONSTRAINT ck_klient_nazw CHECK (nazwisko LIKE '[A-Z]%'),
      nip VARCHAR (64) CONSTRAINT ck_klient_nip CHECK(nip LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
-     nazwa_firmy VARCHAR (64)
+     nazwa_firmy VARCHAR (64),
+     zaleglosc_platnicza INTEGER DEFAULT 0
     )
     ON "default"
 GO
