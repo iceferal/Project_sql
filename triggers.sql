@@ -11,3 +11,14 @@ begin
 		Where (Month(GETDATE()) = Month(data_zlozenia) AND DAY(GETDATE()) = DAY(data_zlozenia)))
 end
 Go
+
+
+Create Trigger tri_egzemplarz On egzemplarz Instead Of Delete
+As
+	Update Egzemplarz
+	Set czy_sprzedano = 1
+	Where nr_seryjny = (Select d.nr_seryjny From deleted d)
+
+	Print 'Nie mozna usuwac egzeplarzy z rejestru'
+	Rollback
+GO
