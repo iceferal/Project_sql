@@ -1,3 +1,2 @@
-# sql
+# Project sql
 Projekt na BAzy Danych
--- projekt smierci --
